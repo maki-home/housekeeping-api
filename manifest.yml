@@ -1,0 +1,24 @@
+applications:
+- name: housekeeping-api
+  path: target/housekeeping-api-0.0.1-SNAPSHOT.jar
+  memory: 256m
+  timeout: 180
+  health-check-type: http
+  health-check-http-endpoint: /actuator/health/readiness
+  env:
+    JBP_CONFIG_OPEN_JDK_JRE: '{memory_calculator: {stack_threads: 16}, jre: {version: 11.+}}'
+    JAVA_OPTS: -XX:MaxMetaspaceSize=128M -XX:ReservedCodeCacheSize=20M -Xss512k -Duser.timezone=Asia/Tokyo
+    SPRING_RESOURCES_CACHE_CACHECONTROL_MAXAGE: 3d
+    SERVER_COMPRESSION_ENABLED: true
+    SERVER_COMPRESSION_MINRESPONSESIZE: 1KB
+    SERVER_TOMCAT_THREADS_MAX: 4
+    MANAGEMENT_METRICS_TAGS_ORGANIZATION: ${vcap.application.organization_name}
+    MANAGEMENT_METRICS_TAGS_SPACE: ${vcap.application.space_name}
+    MANAGEMENT_METRICS_TAGS_APPLICATION: ${vcap.application.application_name}
+    MANAGEMENT_METRICS_TAGS_INSTANCE_ID: ${management.metrics.tags.application}:${vcap.application.instance_index}
+    SPRING_ZIPKIN_SERVICE_NAME: ${management.metrics.tags.space}:${vcap.application.application_name}
+    LOGGING_EXCEPTION_CONVERSION_WORD: "\t%replace(%replace(%xEx){'\n','@n@'}){'\t','    '}%nopex"
+    LOGGING_PATTERN_CONSOLE: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${logging.pattern.level:%5p}) %clr(${PID: }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %replace(%m){'\n','@n@'}${logging.exception-conversion-word:%wEx}%n"
+  services:
+  - housekeeping-db # cf create-service elephantsql turtle housekeeping-db
+
