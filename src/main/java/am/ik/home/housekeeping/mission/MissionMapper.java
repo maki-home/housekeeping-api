@@ -24,7 +24,7 @@ public class MissionMapper {
 						+ "FROM mission AS m "
 						+ "LEFT OUTER JOIN mission_event e ON m.mission_id = e.mission_id "
 						+ "GROUP BY m.mission_id "
-						+ "ORDER BY mission_id;",
+						+ "ORDER BY cycle;",
 				(rs, rowNum) -> {
 					final Date lastDate = rs.getDate("last_date");
 					return ImmutableMission.builder()
