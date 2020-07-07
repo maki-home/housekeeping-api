@@ -16,11 +16,9 @@ import am.ik.home.housekeeping.spec.MissionResponse;
 import am.ik.home.housekeeping.spec.MissionsApi;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin
 public class MissionController implements MissionsApi {
 	private final MissionMapper missionMapper;
 
